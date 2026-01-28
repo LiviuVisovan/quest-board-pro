@@ -1,6 +1,8 @@
 import { mockQuests } from "@/lib/quests";
 
 export default function Home() {
+  const PRIORITY_XP = { low: 25, medium: 50, high: 100 };
+
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50 flex items-center justify-center">
       <div className="max-w-4xl w-full px-6 py-10">
@@ -69,6 +71,13 @@ export default function Home() {
                     Priority:{" "}
                     <span className="capitalize text-slate-300">
                       {quest.priority}
+                    </span>
+                  </span>
+
+                  <span>
+                    XP:{" "}
+                    <span className="capitalize text-slate-300">
+                      {PRIORITY_XP[quest.priority]}
                     </span>
                   </span>
                   {quest.dueDate && (
