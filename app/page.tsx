@@ -110,31 +110,71 @@ export default function Home() {
           <h2 className="text-lg font-medium text-slate-100 mb-2">
             Current quests
           </h2>
-          <form
-            onSubmit={handleSubmit}
-            className="max-w-2xl flex flex-col items-start gap-2 bg-slate-900/60 p-4 rounded-2xl border border-slate-800"
-          >
-            {" "}
-            <label>title</label>
-            <input id="title" name="title" className="bg-slate-950"></input>
-            <label>description</label>
-            <input
-              id="description"
-              name="description"
-              className="bg-slate-950"
-            ></input>
-            <label>priority</label>
-            <select id="priority" name="priority">
-              <option>low</option>
-              <option>medium</option>
-              <option>high</option>
-            </select>
-            <label>due date</label>
-            <input id="dueDate" name="dueDate" className="bg-slate-950"></input>
-            <label>tags</label>
-            <input id="tags" name="tags" className="bg-slate-950"></input>
-            <button type="submit">Submit</button>
-          </form>
+          <div className="max-w-5xl mx-auto px-6 py-10 space-y-8">
+            <section className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 shadow-sm">
+              <h2 className="text-lg font-semibold mb-4">Create quest</h2>
+              <form
+                onSubmit={handleSubmit}
+                className="max-w-md space-y-4 flex flex-col items-start gap-2 bg-slate-900/60 p-4 rounded-2xl border border-slate-800"
+              >
+                {" "}
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-slate-300">
+                    title
+                  </label>
+                  <input
+                    id="title"
+                    name="title"
+                    className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                  ></input>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-slate-300">
+                    description
+                  </label>
+                  <input
+                    id="description"
+                    name="description"
+                    className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                  ></input>
+                </div>
+                <label className="text-xs font-medium text-slate-300">
+                  priority
+                </label>
+                <select id="priority" name="priority">
+                  <option>low</option>
+                  <option>medium</option>
+                  <option>high</option>
+                </select>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-slate-300">
+                    due date
+                  </label>
+                  <input
+                    id="dueDate"
+                    name="dueDate"
+                    className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                  ></input>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-slate-300">
+                    tags
+                  </label>
+                  <input
+                    id="tags"
+                    name="tags"
+                    className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                  ></input>
+                </div>
+                <button
+                  type="submit"
+                  className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-500"
+                >
+                  Submit
+                </button>
+              </form>
+            </section>
+          </div>
 
           <div className="grid gap-4 md:grid-cols-2">
             {quests.map((quest) => (
@@ -210,44 +250,74 @@ export default function Home() {
                     <span>Due: {quest.dueDate.slice(0, 10)}</span>
                   )}
                 </div>
-                <button onClick={() => setEditingId(quest.id)}>Edit</button>
+                <button
+                  className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-500"
+                  onClick={() => setEditingId(quest.id)}
+                >
+                  Edit
+                </button>
                 {editingId === quest.id && (
                   <form
                     onSubmit={(e) => handleEditSubmit(e, quest.id)}
-                    className="max-w-2xl flex flex-col items-start gap-2 bg-slate-900/60 p-4 rounded-2xl border border-slate-800"
+                    className=" max-w-md space-y-4 flex flex-col items-start gap-2 bg-slate-900/60 p-4 rounded-2xl border border-slate-800"
                   >
                     {" "}
-                    <label>title</label>
-                    <input
-                      id="title"
-                      name="title"
-                      className="bg-slate-950"
-                    ></input>
-                    <label>description</label>
-                    <input
-                      id="description"
-                      name="description"
-                      className="bg-slate-950"
-                    ></input>
-                    <label>priority</label>
+                    <div className="space-y-1">
+                      <label className="text-xs font-medium text-slate-300">
+                        title
+                      </label>
+                      <input
+                        id="title"
+                        name="title"
+                        defaultValue={quest.title}
+                        className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                      ></input>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-medium text-slate-300">
+                        description
+                      </label>
+                      <input
+                        id="description"
+                        name="description"
+                        defaultValue={quest.description}
+                        className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                      ></input>
+                    </div>
+                    <label className="text-xs font-medium text-slate-300">
+                      priority
+                    </label>
                     <select id="priority" name="priority">
                       <option>low</option>
                       <option>medium</option>
                       <option>high</option>
                     </select>
-                    <label>due date</label>
-                    <input
-                      id="dueDate"
-                      name="dueDate"
-                      className="bg-slate-950"
-                    ></input>
-                    <label>tags</label>
-                    <input
-                      id="tags"
-                      name="tags"
-                      className="bg-slate-950"
-                    ></input>
-                    <button type="submit">Submit</button>
+                    <div className="space-y-1">
+                      <label className="text-xs font-medium text-slate-300">
+                        due date
+                      </label>
+                      <input
+                        id="dueDate"
+                        name="dueDate"
+                        className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                      ></input>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-medium text-slate-300">
+                        tags
+                      </label>
+                      <input
+                        id="tags"
+                        name="tags"
+                        className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                      ></input>
+                    </div>
+                    <button
+                      type="submit"
+                      className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-500"
+                    >
+                      Submit
+                    </button>
                   </form>
                 )}
               </article>
