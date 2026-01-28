@@ -1,6 +1,6 @@
 "use client";
 
-import { mockQuests, type Quest } from "@/lib/quests";
+import { mockQuests, type Quest, QuestPriority } from "@/lib/quests";
 import { useState } from "react";
 
 export default function Home() {
@@ -31,6 +31,38 @@ export default function Home() {
     setQuests((prev) => [...prev, payload]);
   }
 
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    const fd = new FormData(e.currentTarget);
+    const title = String(fd.get("title") || "");
+    const description = String(fd.get("description") || "");
+    const priority = String(fd.get("priority") || "low") as QuestPriority;
+    const dueDate = String(fd.get("dueDate") || "");
+    const tags = String(fd.get("tags") || "");
+
+    const now = new Date().toISOString();
+    const payload: Quest = {
+      id: crypto.randomUUID(),
+      title,
+      description: description || undefined,
+      status: "backlog",
+      priority,
+      tags: tags
+        ? tags
+            .split(",")
+            .map((t) => t.trim())
+            .filter(Boolean)
+        : [],
+      dueDate: dueDate || undefined,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    createQuest(payload);
+    e.currentTarget.reset();
+  }
+
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50 flex items-center justify-center">
       <div className="max-w-4xl w-full px-6 py-10">
@@ -49,6 +81,31 @@ export default function Home() {
           <h2 className="text-lg font-medium text-slate-100 mb-2">
             Current quests
           </h2>
+          <form
+            onSubmit={handleSubmit}
+            className="max-w-2xl flex flex-col items-start gap-2 bg-slate-900/60 p-4 rounded-2xl border border-slate-800"
+          >
+            {" "}
+            <label>title</label>
+            <input id="title" name="title" className="bg-slate-950"></input>
+            <label>description</label>
+            <input
+              id="description"
+              name="description"
+              className="bg-slate-950"
+            ></input>
+            <label>priority</label>
+            <select id="priority" name="priority">
+              <option>low</option>
+              <option>medium</option>
+              <option>high</option>
+            </select>
+            <label>due date</label>
+            <input id="dueDate" name="dueDate" className="bg-slate-950"></input>
+            <label>tags</label>
+            <input id="tags" name="tags" className="bg-slate-950"></input>
+            <button type="submit">Submit</button>
+          </form>
 
           <div className="grid gap-4 md:grid-cols-2">
             {quests.map((quest) => (
