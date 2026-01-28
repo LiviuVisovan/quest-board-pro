@@ -8,27 +8,23 @@ export default function Home() {
   const [quests, setQuests] = useState<Quest[]>(mockQuests);
 
   function completeQuest(id) {
-    setQuests(
-      quests.map((q) => {
+    setQuests((prev) =>
+      prev.map((q) => {
         return q.id === id ? { ...q, status: "done" } : q;
       }),
     );
   }
 
-  function editQuest(id, updates: Quest) {
-    setQuests(
-      quests.map((q) => {
-        return q.id === id ? { ...q, updates } : q;
+  function editQuest(id, updates: Partial<Quest>) {
+    setQuests((prev) =>
+      prev.map((q) => {
+        return q.id === id ? { ...q, ...updates } : q;
       }),
     );
   }
 
   function deleteQuest(id) {
-    setQuests(
-      quests.filter((q) => {
-        if (q.id !== id) return q;
-      }),
-    );
+    setQuests((prev) => prev.filter((q) => q.id !== id));
   }
 
   function createQuest(payload: Quest) {
