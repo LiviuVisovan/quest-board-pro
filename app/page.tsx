@@ -6,7 +6,7 @@ import { useState } from "react";
 export default function Home() {
   const PRIORITY_XP = { low: 25, medium: 50, high: 100 };
   const [quests, setQuests] = useState<Quest[]>(mockQuests);
-  const [isEditing, setIsEditing] = useState(false);
+  const [editingId, setEditingId] = useState("");
 
   function completeQuest(id) {
     setQuests((prev) =>
@@ -89,6 +89,7 @@ export default function Home() {
     };
     editQuest(id, payload);
     e.currentTarget.reset();
+    setEditingId("");
   }
 
   return (
@@ -209,12 +210,10 @@ export default function Home() {
                     <span>Due: {quest.dueDate.slice(0, 10)}</span>
                   )}
                 </div>
-                <button onClick={() => setIsEditing((prev) => !prev)}>
-                  Edit
-                </button>
-                {isEditing && (
+                <button onClick={() => setEditingId(quest.id)}>Edit</button>
+                {editingId === quest.id && (
                   <form
-                    onSubmit={() => handleEditSubmit(e, quests.id)}
+                    onSubmit={(e) => handleEditSubmit(e, quest.id)}
                     className="max-w-2xl flex flex-col items-start gap-2 bg-slate-900/60 p-4 rounded-2xl border border-slate-800"
                   >
                     {" "}
