@@ -6,6 +6,7 @@ import { useState } from "react";
 export default function Home() {
   const PRIORITY_XP = { low: 25, medium: 50, high: 100 };
   const [quests, setQuests] = useState<Quest[]>(mockQuests);
+  const [isEditing, setIsEditing] = useState(false);
 
   function completeQuest(id) {
     setQuests((prev) =>
@@ -58,8 +59,35 @@ export default function Home() {
       createdAt: now,
       updatedAt: now,
     };
-
     createQuest(payload);
+    e.currentTarget.reset();
+  }
+
+  function handleEditSubmit(e, id) {
+    e.preventDefault();
+
+    const fd = new FormData(e.currentTarget);
+    const title = String(fd.get("title") || "");
+    const description = String(fd.get("description") || "");
+    const priority = String(fd.get("priority") || "low") as QuestPriority;
+    const dueDate = String(fd.get("dueDate") || "");
+    const tags = String(fd.get("tags") || "");
+
+    const now = new Date().toISOString();
+    const payload: Partial<Quest> = {
+      title,
+      description: description || undefined,
+      priority,
+      tags: tags
+        ? tags
+            .split(",")
+            .map((t) => t.trim())
+            .filter(Boolean)
+        : [],
+      dueDate: dueDate || undefined,
+      updatedAt: now,
+    };
+    editQuest(id, payload);
     e.currentTarget.reset();
   }
 
@@ -181,6 +209,48 @@ export default function Home() {
                     <span>Due: {quest.dueDate.slice(0, 10)}</span>
                   )}
                 </div>
+                <button onClick={() => setIsEditing((prev) => !prev)}>
+                  Edit
+                </button>
+                {isEditing && (
+                  <form
+                    onSubmit={() => handleEditSubmit(e, quests.id)}
+                    className="max-w-2xl flex flex-col items-start gap-2 bg-slate-900/60 p-4 rounded-2xl border border-slate-800"
+                  >
+                    {" "}
+                    <label>title</label>
+                    <input
+                      id="title"
+                      name="title"
+                      className="bg-slate-950"
+                    ></input>
+                    <label>description</label>
+                    <input
+                      id="description"
+                      name="description"
+                      className="bg-slate-950"
+                    ></input>
+                    <label>priority</label>
+                    <select id="priority" name="priority">
+                      <option>low</option>
+                      <option>medium</option>
+                      <option>high</option>
+                    </select>
+                    <label>due date</label>
+                    <input
+                      id="dueDate"
+                      name="dueDate"
+                      className="bg-slate-950"
+                    ></input>
+                    <label>tags</label>
+                    <input
+                      id="tags"
+                      name="tags"
+                      className="bg-slate-950"
+                    ></input>
+                    <button type="submit">Submit</button>
+                  </form>
+                )}
               </article>
             ))}
           </div>
