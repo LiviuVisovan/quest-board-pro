@@ -1,7 +1,39 @@
-import { mockQuests } from "@/lib/quests";
+"use client";
+
+import { mockQuests, type Quest } from "@/lib/quests";
+import { useState } from "react";
 
 export default function Home() {
   const PRIORITY_XP = { low: 25, medium: 50, high: 100 };
+  const [quests, setQuests] = useState<Quest[]>(mockQuests);
+
+  function completeQuest(id) {
+    setQuests(
+      quests.map((q) => {
+        return q.id === id ? { ...q, status: "done" } : q;
+      }),
+    );
+  }
+
+  function editQuest(id, updates: Quest) {
+    setQuests(
+      quests.map((q) => {
+        return q.id === id ? { ...q, updates } : q;
+      }),
+    );
+  }
+
+  function deleteQuest(id) {
+    setQuests(
+      quests.filter((q) => {
+        if (q.id !== id) return q;
+      }),
+    );
+  }
+
+  function createQuest(payload: Quest) {
+    setQuests((prev) => [...prev, payload]);
+  }
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50 flex items-center justify-center">
@@ -23,7 +55,7 @@ export default function Home() {
           </h2>
 
           <div className="grid gap-4 md:grid-cols-2">
-            {mockQuests.map((quest) => (
+            {quests.map((quest) => (
               <article
                 key={quest.id}
                 className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 shadow-sm flex flex-col justify-between"
@@ -44,6 +76,18 @@ export default function Home() {
                     >
                       {quest.status.replace("_", " ")}
                     </span>
+                    <button
+                      onClick={() => deleteQuest(quest.id)}
+                      className="text-xs px-2 py-1 rounded-full border border-red-500/60 text-red-300"
+                    >
+                      X
+                    </button>
+                    <button
+                      onClick={() => completeQuest(quest.id)}
+                      className="text-xs px-2 py-1 rounded-full border border-emerald-500/60 text-emerald-300"
+                    >
+                      ✓
+                    </button>
                   </div>
 
                   {quest.description && (
