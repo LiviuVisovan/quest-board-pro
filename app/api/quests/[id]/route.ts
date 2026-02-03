@@ -1,25 +1,36 @@
-import { quests, setQuests } from "@/lib/questsStore";
+import { prisma } from "@/lib/prisma";
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } },
-) {
-  const next = quests.filter((q) => q.id !== params.id);
-  setQuests(next);
-  return new Response(null, { status: 204 });
-}
+export const runtime = "nodejs";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } },
+  ctx: { params: Promise<{ id: string }> },
 ) {
-  const payload = await req.json();
-  const next = quests.map((q) => {
-    if (q.id === params.id) {
-      return { ...q, ...payload };
-    }
-    return q;
+  const { id } = await ctx.params;
+
+  const body = await req.json();
+
+  const data: any = {};
+  if (typeof body.title === "string") data.title = body.title;
+  if (typeof body.description === "string") data.description = body.description;
+  if (body.description === null) data.description = null;
+  if (typeof body.status === "string") data.status = body.status;
+  if (typeof body.priority === "string") data.priority = body.priority;
+
+  const quest = await prisma.quest.update({
+    where: { id },
+    data,
   });
-  setQuests(next);
+
+  return Response.json(quest);
+}
+
+export async function DELETE(
+  _req: Request,
+  ctx: { params: Promise<{ id: string }> },
+) {
+  const { id } = await ctx.params;
+
+  await prisma.quest.delete({ where: { id } });
   return new Response(null, { status: 204 });
 }

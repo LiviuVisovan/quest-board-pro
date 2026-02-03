@@ -27,7 +27,6 @@ export default function Home() {
   async function editQuest(id, updates: Partial<Quest>) {
     await fetch(`/api/quests/${id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updates),
     });
     await fetchQuests();
