@@ -238,7 +238,7 @@ export default function Home() {
                       </p>
                     )}
 
-                    {quest.tags.length > 0 && (
+                    {(quest.tags ?? []).length > 0 && (
                       <div className="flex flex-wrap gap-1 mt-1">
                         {quest.tags.map((tag) => (
                           <span
