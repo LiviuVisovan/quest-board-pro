@@ -1,0 +1,20 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Quest {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  status      String
+  priority    String
+  createdAt   DateTime @default(now())
+}
