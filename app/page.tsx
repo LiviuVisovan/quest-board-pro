@@ -24,16 +24,18 @@ export default function Home() {
     );
   }
 
-  function editQuest(id, updates: Partial<Quest>) {
-    setQuests((prev) =>
-      prev.map((q) => {
-        return q.id === id ? { ...q, ...updates } : q;
-      }),
-    );
+  async function editQuest(id, updates: Partial<Quest>) {
+    await fetch(`/api/quests/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updates),
+    });
+    await fetchQuests();
   }
 
-  function deleteQuest(id) {
-    setQuests((prev) => prev.filter((q) => q.id !== id));
+  async function deleteQuest(id) {
+    await fetch(`/api/quests/${id}`, { method: "DELETE" });
+    await fetchQuests();
   }
   async function createQuest(newQuest: Quest) {
     const res = await fetch("/api/quests", {

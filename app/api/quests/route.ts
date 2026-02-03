@@ -1,6 +1,4 @@
-import { mockQuests } from "@/lib/quests";
-
-let quests = [...mockQuests];
+import { quests, setQuests } from "@/lib/questsStore";
 
 export async function GET() {
   return new Response(JSON.stringify(quests), {
@@ -10,9 +8,7 @@ export async function GET() {
 
 export async function POST(req: Request) {
   const newQuest = await req.json();
-
-  quests.push(newQuest);
-
+  setQuests([...quests, newQuest]);
   return new Response(JSON.stringify(newQuest), {
     status: 201,
     headers: { "Content-Type": "application/json" },
