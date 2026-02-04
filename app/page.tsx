@@ -6,12 +6,27 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const PRIORITY_XP = { low: 25, medium: 50, high: 100 };
   const [quests, setQuests] = useState<Quest[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [editingId, setEditingId] = useState("");
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const surface =
+    "rounded-2xl border border-white/10 bg-white/5 shadow-[0_0_0_1px_rgba(255,255,255,0.04)]";
+
   async function fetchQuests() {
-    const response = await fetch("/api/quests");
-    const data = (await response.json()) as Quest[];
-    setQuests(data);
+    setIsLoading(true);
+    setLoadError(null);
+    try {
+      const res = await fetch("/api/quests");
+      if (!res.ok) throw new Error(`Failed to load quests (${res.status})`);
+      const data = await res.json();
+      setQuests(data);
+    } catch (e: any) {
+      setLoadError(e?.message ?? "Failed to load quests");
+    } finally {
+      setIsLoading(false);
+    }
   }
+
   useEffect(() => {
     fetchQuests();
   }, []);
@@ -118,89 +133,101 @@ export default function Home() {
             Quest Board Pro
           </h1>
           <p className="text-slate-300">
-            A full-stack quest & task manager built with Next.js, TypeScript,
-            Tailwind, and a real database. This is the central board where all
-            quests live.
+            A full-stack quest board with next js
           </p>
         </header>
-
+        <div className={`${surface} p-6`}>
+          <section className="rounded-2xl border border-slate-800 bg-slate-900/40 p-5 shadow-sm">
+            <h2 className="text-lg font-semibold mb-4">Create quest</h2>
+            <form
+              onSubmit={handleSubmit}
+              className="max-w-md space-y-1 flex flex-col items-start gap-2 bg-slate-900/60 p-4 rounded-2xl border border-slate-800"
+            >
+              {" "}
+              <div className="space-y-5">
+                <label className="text-xs font-medium text-slate-300">
+                  Title
+                </label>
+                <input
+                  id="title"
+                  name="title"
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-2 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                ></input>
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-slate-300">
+                  Description
+                </label>
+                <input
+                  id="description"
+                  name="description"
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                ></input>
+              </div>
+              <label className="text-xs font-medium text-slate-300">
+                Priority
+              </label>
+              <select id="priority" name="priority">
+                <option>low</option>
+                <option>medium</option>
+                <option>high</option>
+              </select>
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-slate-300">
+                  Due date
+                </label>
+                <input
+                  id="dueDate"
+                  name="dueDate"
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                ></input>
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-slate-300">
+                  Tags
+                </label>
+                <input
+                  id="tags"
+                  name="tags"
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                ></input>
+              </div>
+              <button
+                type="submit"
+                className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-500"
+              >
+                Submit
+              </button>
+            </form>
+          </section>
+        </div>
         <section className="space-y-4">
           <h2 className="text-lg font-medium text-slate-100 mb-2">
             Current quests
           </h2>
-          <div className="max-w-5xl mx-auto px-6 py-10 space-y-8">
-            <section className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 shadow-sm">
-              <h2 className="text-lg font-semibold mb-4">Create quest</h2>
-              <form
-                onSubmit={handleSubmit}
-                className="max-w-md space-y-4 flex flex-col items-start gap-2 bg-slate-900/60 p-4 rounded-2xl border border-slate-800"
-              >
-                {" "}
-                <div className="space-y-1">
-                  <label className="text-xs font-medium text-slate-300">
-                    title
-                  </label>
-                  <input
-                    id="title"
-                    name="title"
-                    className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
-                  ></input>
-                </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-medium text-slate-300">
-                    description
-                  </label>
-                  <input
-                    id="description"
-                    name="description"
-                    className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
-                  ></input>
-                </div>
-                <label className="text-xs font-medium text-slate-300">
-                  priority
-                </label>
-                <select id="priority" name="priority">
-                  <option>low</option>
-                  <option>medium</option>
-                  <option>high</option>
-                </select>
-                <div className="space-y-1">
-                  <label className="text-xs font-medium text-slate-300">
-                    due date
-                  </label>
-                  <input
-                    id="dueDate"
-                    name="dueDate"
-                    className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
-                  ></input>
-                </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-medium text-slate-300">
-                    tags
-                  </label>
-                  <input
-                    id="tags"
-                    name="tags"
-                    className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
-                  ></input>
-                </div>
-                <button
-                  type="submit"
-                  className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-500"
-                >
-                  Submit
-                </button>
-              </form>
-            </section>
-          </div>
 
           <div className="grid gap-4 md:grid-cols-2">
-            {quests &&
-              quests.map((quest) => (
-                <article
-                  key={quest.id}
-                  className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 shadow-sm flex flex-col justify-between"
+            {isLoading ? (
+              <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-6">
+                Loading quests…
+              </div>
+            ) : loadError ? (
+              <div className="mt-6 rounded-2xl border border-red-500/30 bg-red-500/10 p-6">
+                <p className="mb-3">⚠️ {loadError}</p>
+                <button
+                  className="rounded-xl bg-white/10 px-4 py-2 hover:bg-white/15"
+                  onClick={fetchQuests}
                 >
+                  Retry
+                </button>
+              </div>
+            ) : quests.length === 0 ? (
+              <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-6">
+                No quests yet. Create your first one 👇
+              </div>
+            ) : (
+              quests.map((quest) => (
+                <article key={quest.id} className={`${surface} p-6`}>
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-1">
                       <h3 className="font-semibold text-slate-50">
@@ -340,7 +367,8 @@ export default function Home() {
                     </form>
                   )}
                 </article>
-              ))}
+              ))
+            )}
           </div>
         </section>
       </div>
