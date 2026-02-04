@@ -126,7 +126,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-50 flex items-center justify-center">
+    <main className="min-h-screen bg-slate-950 text-slate-50 flex  justify-center">
       <div className="max-w-4xl w-full px-6 py-10">
         <header className="mb-8">
           <h1 className="text-3xl md:text-4xl font-semibold tracking-tight mb-2">
@@ -136,77 +136,92 @@ export default function Home() {
             A full-stack quest board with next js
           </p>
         </header>
-        <div className={`${surface} p-6`}>
-          <section className="rounded-2xl border border-slate-800 bg-slate-900/40 p-5 shadow-sm">
-            <h2 className="text-lg font-semibold mb-4">Create quest</h2>
-            <form
-              onSubmit={handleSubmit}
-              className="max-w-md space-y-1 flex flex-col items-start gap-2 bg-slate-900/60 p-4 rounded-2xl border border-slate-800"
-            >
-              {" "}
-              <div className="space-y-5">
-                <label className="text-xs font-medium text-slate-300">
+        <div className={`${surface} mx-auto max-w-5xl p-4`}>
+          <h2 className="mb-3 text-sm font-semibold text-slate-200">
+            Create quest
+          </h2>
+
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-3 rounded-2xl border border-slate-800 bg-slate-900/50 p-3"
+          >
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+              <div className="flex-1">
+                <label className="mb-1 block text-xs font-medium text-slate-400">
                   Title
                 </label>
                 <input
                   id="title"
                   name="title"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-2 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
-                ></input>
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                />
               </div>
-              <div className="space-y-1">
-                <label className="text-xs font-medium text-slate-300">
+
+              <div className="w-full sm:w-40">
+                <label className="mb-1 block text-xs font-medium text-slate-400">
+                  Priority
+                </label>
+                <select
+                  id="priority"
+                  name="priority"
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                >
+                  <option>low</option>
+                  <option>medium</option>
+                  <option>high</option>
+                </select>
+              </div>
+
+              <button
+                type="submit"
+                className="h-[38px] rounded-xl bg-violet-600 px-5 text-sm font-semibold text-white hover:bg-violet-500"
+              >
+                Add
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <div>
+                <label className="mb-1 block text-xs font-medium text-slate-400">
                   Description
                 </label>
                 <input
                   id="description"
                   name="description"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
-                ></input>
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                />
               </div>
-              <label className="text-xs font-medium text-slate-300">
-                Priority
-              </label>
-              <select id="priority" name="priority">
-                <option>low</option>
-                <option>medium</option>
-                <option>high</option>
-              </select>
-              <div className="space-y-1">
-                <label className="text-xs font-medium text-slate-300">
+
+              <div>
+                <label className="mb-1 block text-xs font-medium text-slate-400">
                   Due date
                 </label>
                 <input
                   id="dueDate"
                   name="dueDate"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
-                ></input>
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                />
               </div>
-              <div className="space-y-1">
-                <label className="text-xs font-medium text-slate-300">
+
+              <div>
+                <label className="mb-1 block text-xs font-medium text-slate-400">
                   Tags
                 </label>
                 <input
                   id="tags"
                   name="tags"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
-                ></input>
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                />
               </div>
-              <button
-                type="submit"
-                className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-500"
-              >
-                Submit
-              </button>
-            </form>
-          </section>
+            </div>
+          </form>
         </div>
-        <section className="space-y-4">
-          <h2 className="text-lg font-medium text-slate-100 mb-2">
-            Current quests
+        <section className="space-y-4 mx-auto max-w-4xl">
+          <h2 className="text-3xl md:text-3xl font-semibold tracking-tight  mb-2 mt-2">
+            Quests
           </h2>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-2 ">
             {isLoading ? (
               <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-6">
                 Loading quests…
