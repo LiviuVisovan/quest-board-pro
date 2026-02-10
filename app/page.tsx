@@ -1,6 +1,6 @@
 "use client";
 
-import { mockQuests, type Quest, QuestPriority } from "@/lib/quests";
+import { type Quest, QuestPriority } from "@/lib/quests";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -65,7 +65,7 @@ export default function Home() {
     return created;
   }
 
-  function handleSubmit(e) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const fd = new FormData(e.currentTarget);
@@ -96,7 +96,7 @@ export default function Home() {
     e.currentTarget.reset();
   }
 
-  function handleEditSubmit(e, id: string) {
+  function handleEditSubmit(e: React.FormEvent<HTMLFormElement>, id: string) {
     e.preventDefault();
 
     const fd = new FormData(e.currentTarget);
