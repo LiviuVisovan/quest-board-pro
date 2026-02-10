@@ -31,7 +31,7 @@ export default function Home() {
     fetchQuests();
   }, []);
 
-  function completeQuest(id) {
+  function completeQuest(id: string) {
     setQuests((prev) =>
       prev.map((q) => {
         return q.id === id ? { ...q, status: "done" } : q;
@@ -39,7 +39,7 @@ export default function Home() {
     );
   }
 
-  async function editQuest(id, updates: Partial<Quest>) {
+  async function editQuest(id: string, updates: Partial<Quest>) {
     await fetch(`/api/quests/${id}`, {
       method: "PATCH",
       body: JSON.stringify(updates),
@@ -47,7 +47,7 @@ export default function Home() {
     await fetchQuests();
   }
 
-  async function deleteQuest(id) {
+  async function deleteQuest(id: string) {
     await fetch(`/api/quests/${id}`, { method: "DELETE" });
     await fetchQuests();
   }
