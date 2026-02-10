@@ -96,7 +96,7 @@ export default function Home() {
     e.currentTarget.reset();
   }
 
-  function handleEditSubmit(e, id) {
+  function handleEditSubmit(e, id: string) {
     e.preventDefault();
 
     const fd = new FormData(e.currentTarget);
